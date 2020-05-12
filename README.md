@@ -1,0 +1,1 @@
+MyBB-jQuery-Color-Picker
