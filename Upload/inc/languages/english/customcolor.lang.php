@@ -7,6 +7,7 @@
  *	Copyright: © 2020 Omar Gonzalez
  *
  *	Website: https://ougc.network
+ *  Based off: https://community.mybb.com/thread-158934-post-1343419.html#pid1343419
  *
  *	Allow your users to select custom colors to adapt the theme display.
  *

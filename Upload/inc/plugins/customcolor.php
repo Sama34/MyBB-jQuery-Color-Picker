@@ -7,6 +7,7 @@
  *	Copyright: © 2020 Omar Gonzalez
  *
  *	Website: https://ougc.network
+ *  Based off: https://community.mybb.com/thread-158934-post-1343419.html#pid1343419
  *
  *	Allow your users to select custom colors to adapt the theme display.
  *
@@ -100,7 +101,7 @@ function customcolor_uninstall()
 
 	customcolor_pluginlibrary();
 
-    !customcolor_is_installed() || $db->drop_field('users', 'customcolor');
+    !customcolor_is_installed() || $db->drop_column('users', 'customcolor');
 
 	// Delete stylesheet
 	$PL->stylesheet_delete('customcolor');
