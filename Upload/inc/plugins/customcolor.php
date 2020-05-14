@@ -33,10 +33,31 @@ if(!defined("IN_MYBB"))
     die("Direct initialization of this file is not allowed.");
 }
 
-$plugins->add_hook('global_intermediate', 'customcolor_headerinclude');
-$plugins->add_hook("usercp_options_end", "customcolor_usercp_options_end");
-$plugins->add_hook("misc_start", "customcolor_misc_start");
-$plugins->add_hook("xmlhttp", "customcolor_xmlhttp");
+if(!defined('IN_ADMINCP'))
+{
+    $plugins->add_hook('global_intermediate', 'customcolor_headerinclude');
+    $plugins->add_hook("usercp_options_end", "customcolor_usercp_options_end");
+    $plugins->add_hook("misc_start", "customcolor_misc_start");
+    $plugins->add_hook("xmlhttp", "customcolor_xmlhttp");
+    
+    global $templatelist;
+    
+    if(isset($templatelist))
+    {
+        $templatelist .= ',';
+    }
+    else
+    {
+        $templatelist = '';
+    }
+    
+    $templatelist .= 'customcolor_headerinclude, customcolor_footer, customcolor_input';
+
+    if(defined('THIS_SCRIPT') && THIS_SCRIPT == 'usercp.php')
+    {
+        $templatelist .= ', customcolor_usercp';
+    }
+}
 
 // PLUGINLIBRARY
 defined('PLUGINLIBRARY') or define('PLUGINLIBRARY', MYBB_ROOT.'inc/plugins/pluginlibrary.php');
@@ -175,8 +196,7 @@ function customcolor_activate()
 #colorpicker{
 	border: 0;
 	text-indent: -999px;
-	height: 34px;
-	width: 37px;
+	width: 18px;
 	cursor: pointer;
 }
 
@@ -419,7 +439,7 @@ function customcolor_activate()
 	$PL->templates('customcolor', 'Custom Color', array(
 		'headerinclude' => '{$ucp}
 <link rel="stylesheet" type="text/css" href="{$mybb->settings[\'bburl\']}/xmlhttp.php?action=customcolor" />',
-        'headerinclude_ucp'  => '<script type="text/javascript" src="{$mybb->settings[\'bburl\']}/jscripts/customcolor/colorpicker.js"></script>
+        'footer'  => '<script type="text/javascript" src="{$mybb->settings[\'bburl\']}/jscripts/customcolor/colorpicker.js"></script>
 <script type="text/javascript" src="{$mybb->settings[\'bburl\']}/jscripts/customcolor/cookie.js"></script>
 <script>
 $(document).ready(function($){
@@ -447,13 +467,13 @@ $(document).ready(function($){
     });
 });
 </script>',
+		'input'    => '<span class="custom_theme" title="{$lang->colorucp_input}"><input type="text" id="colorpicker" value="{$mybb->settings[\'customcolor_default\']}" /></span>',
 		'usercp'    => '<tr>
     <td colspan="2"><span class="smalltext">{$lang->colorucp}</span></td>
 </tr>
 <tr>
     <td colspan="2">
         <p>{$lang->colorucp_desc}</p>
-        <span class="custom_theme"><input type="text" id="colorpicker" value="{$mybb->settings[\'customcolor_default\']}" /></span>
     </td>
 </tr>',
         'css_backgrounds' => '{$mybb->settings[\'customcolor_backgrounds\']}
@@ -477,7 +497,9 @@ $(document).ready(function($){
 	// Modify some templates.
 	require_once MYBB_ROOT.'inc/adminfunctions_templates.php';
 	find_replace_templatesets('headerinclude', '#'.preg_quote('{$stylesheets}').'#i', '{$stylesheets}{$customcolor_headerinclude}');
+	find_replace_templatesets('footer', '#'.preg_quote('{$auto_dst_detection}').'#i', '{$auto_dst_detection}{$customcolor_footer}');
 	find_replace_templatesets('usercp_options', '#'.preg_quote('{$board_style}').'#i', '{$board_style}{$customcolor}');
+	find_replace_templatesets('header_welcomeblock_member', '#'.preg_quote('{$buddylink}').'#i', '{$customcolor_input}{$buddylink}');
 
 	global $cache;
 
@@ -500,24 +522,36 @@ function customcolor_deactivate()
 {
 	require_once MYBB_ROOT.'inc/adminfunctions_templates.php';
     find_replace_templatesets('headerinclude', '#'.preg_quote('{$customcolor_headerinclude}').'#i', '', 0);
+    find_replace_templatesets('footer', '#'.preg_quote('{$customcolor_footer}').'#i', '', 0);
     find_replace_templatesets('usercp_options', '#'.preg_quote('{$customcolor}').'#i', '', 0);
+    find_replace_templatesets('header_welcomeblock_member', '#'.preg_quote('{$customcolor_input}').'#i', '', 0);
 }
 
 function customcolor_headerinclude()
 {
-    global $mybb, $templates, $customcolor_headerinclude;
+    global $mybb, $templates, $customcolor_headerinclude, $customcolor_footer, $customcolor_input;
 
     if(!$mybb->user['uid'])
     {
         return;
     }
 
-    if(THIS_SCRIPT == 'usercp.php' && $mybb->get_input('action') == 'options')
-    {
-        $ucp = eval($templates->render('customcolor_headerinclude_ucp'));
-    }
+    $customcolor_headerinclude = eval($templates->render('customcolor_headerinclude'));
 
-	$customcolor_headerinclude = eval($templates->render('customcolor_headerinclude'));
+    $customcolor_footer = eval($templates->render('customcolor_footer'));
+
+    $customcolor_footer = eval($templates->render('customcolor_footer'));
+
+    $customcolor_input = '';
+
+    if($mybb->usergroup['canusercp'])
+    {
+        global $lang;
+
+        customcolor_lang_load();
+
+        $customcolor_input = eval($templates->render('customcolor_input'));
+    }
 }
 
 function customcolor_usercp_options_end()
@@ -537,6 +571,11 @@ function customcolor_misc_start()
     if($mybb->get_input('action') != 'customcolor')
     {
         return;
+    }
+
+    if(!$mybb->usergroup['canusercp'])
+    {
+        error_no_permission();
     }
 
     $uid = (int)$mybb->user["uid"];
