@@ -68,13 +68,16 @@ function customcolor_info()
 
     customcolor_lang_load();
 
+    $lang->desc_plugin .= ' This work is isnpired off the work by <strong><a href="">iAndrew</a></strong>, <a href="https://iandrew.org/">AmazOuz</a>, and <a href="https://community.mybb.com/thread-158934-post-1343419.html#pid1343419">vintagedaddyo</a>.';
+
     return array(
         "name"          => $lang->title_plugin,
         "description"   => $lang->desc_plugin,
-        "website"       => "https://developement.design/",
-        "author"        => "AmazOuz and fixed by Vintagedaddyo",
-        "authorsite"    => "https://developement.design/",
+		'website'		=> 'https://ougc.network',
+		'author'		=> 'Omar G.',
+		'authorsite'	=> 'https://ougc.network',
         "version"       => "1.8",
+		'versioncode'	=> 1800,
         "codename"      => "ougc_customcolor",
         "compatibility" => "18*"
     );

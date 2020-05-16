@@ -32,4 +32,4 @@ $l["colorucp"] = "Color Settings";
 $l["colorucp_input"] = "Choose your favourite color from the color picker below, then click the save button.";
 $l["colorucp_desc"] = "<a href=\"{1}/misc.php?action=customcolor&reset=1\">Click here</a> to revert back to the default color.";
 $l["colorchoose"] = "Choose color";
-$l["colorsaved"] = "Saved successfuly";
+$l["colorsaved"] = "Custom color saved successfuly.";
