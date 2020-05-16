@@ -68,7 +68,7 @@ function customcolor_info()
 
     customcolor_lang_load();
 
-    $lang->desc_plugin .= ' This work is isnpired off the work by <strong><a href="">iAndrew</a></strong>, <a href="https://iandrew.org/">AmazOuz</a>, and <a href="https://community.mybb.com/thread-158934-post-1343419.html#pid1343419">vintagedaddyo</a>.';
+    $lang->desc_plugin .= ' This work is isnpired off the work by <strong><a href="https://iandrew.org/">iAndrew</a></strong>, <a href="https://iandrew.org/">AmazOuz</a>, and <a href="https://community.mybb.com/thread-158934-post-1343419.html#pid1343419">vintagedaddyo</a>.';
 
     return array(
         "name"          => $lang->title_plugin,
