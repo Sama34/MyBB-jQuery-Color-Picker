@@ -305,6 +305,7 @@ function customcolor_activate()
     width: 62px;
     background-position: top;
     position: absolute;
+    display: none; /* hide fields */
 }
 .colorpicker_field span {
     position: absolute;
