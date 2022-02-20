@@ -210,7 +210,7 @@ function customcolor_activate()
     height: 176px;
     overflow: hidden;
     position: absolute;
-    background: url(images/cp/colorpicker_background.png);
+    background: url(images/cp/custom_background.png);
     font-family: Arial, Helvetica, sans-serif;
     display: none;
 }
@@ -255,7 +255,7 @@ function customcolor_activate()
     width: 35px;
     height: 9px;
     overflow: hidden;
-    background: url(images/cp/colorpicker_indic.gif) left top;
+    background: url(images/cp/custom_indic.gif) left top;
     margin: -4px 0 0 0;
     left: 0px;
 }
@@ -293,7 +293,7 @@ function customcolor_activate()
     position: absolute;
     width: 72px;
     height: 22px;
-    background: url(images/cp/colorpicker_hex.png) top;
+    background: url(images/cp/custom_hex.png) top;
     left: 212px;
     top: 142px;
 }
@@ -316,43 +316,41 @@ function customcolor_activate()
     cursor: n-resize;
 }
 .colorpicker_rgb_r {
-    background-image: url(images/cp/colorpicker_rgb_r.png);
+    background-image: url(images/cp/custom_rgb_r.png);
     top: 52px;
     left: 212px;
 }
 .colorpicker_rgb_g {
-    background-image: url(images/cp/colorpicker_rgb_g.png);
+    background-image: url(images/cp/custom_rgb_g.png);
     top: 82px;
     left: 212px;
 }
 .colorpicker_rgb_b {
-    background-image: url(images/cp/colorpicker_rgb_b.png);
+    background-image: url(images/cp/custom_rgb_b.png);
     top: 112px;
     left: 212px;
 }
 .colorpicker_hsb_h {
-    background-image: url(images/cp/colorpicker_hsb_h.png);
+    background-image: url(images/cp/custom_hsb_h.png);
     top: 52px;
     left: 282px;
 }
 .colorpicker_hsb_s {
-    background-image: url(images/cp/colorpicker_hsb_s.png);
+    background-image: url(images/cp/custom_hsb_s.png);
     top: 82px;
     left: 282px;
 }
 .colorpicker_hsb_b {
-    background-image: url(images/cp/colorpicker_hsb_b.png);
+    background-image: url(images/cp/custom_hsb_b.png);
     top: 112px;
     left: 282px;
 }
 .colorpicker_submit {
     position: absolute;
-    /* width: 22px; */
-    width: 56px;
+    width: 22px;
     height: 22px;
-    background: url(images/cp/colorpicker_submit.png) top;
-    /* left: 322px; */
-    left: 290px;
+    background: url(images/cp/custom_submit.png) top;
+    left: 322px;
     top: 142px;
     overflow: hidden;
 }
