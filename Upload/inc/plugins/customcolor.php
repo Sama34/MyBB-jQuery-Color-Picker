@@ -196,7 +196,13 @@ function customcolor_activate()
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ****************************************************************************/
 
-#colorpicker{
+#colorpicker.color_select {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+}
+
+#colorpicker {
 	border: 0;
 	text-indent: -999px;
 	width: 18px;
@@ -440,9 +446,9 @@ $(document).ready(function($){
 </tr>
 <tr>
     <td colspan="2">
-    <p class="smalltext">{$lang->colorucp_input}</p>
-<span class="custom_theme" title="{$lang->colorucp_input}"><input type="text" id="colorpicker" value="{$mybb->settings[\'customcolor_default\']}" /></span>
-</td>
+        <p class="smalltext">{$lang->colorucp_input}</p>
+        <span class="theme_color" title="{$lang->colorchoose}"><input class="color_select" type="text" id="colorpicker" value="{$mybb->settings[\'customcolor_default\']}" /></span>
+    </td>
 </tr>
 <tr>
     <td colspan="2">
