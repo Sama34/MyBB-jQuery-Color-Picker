@@ -3,10 +3,11 @@
 /***************************************************************************
  *
  *	MyBB jQuery Color Picker plugin (/inc/plugins/customcolor.php)
- *	Author: Omar Gonzalez
- *	Copyright: © 2020 Omar Gonzalez
+ *  Authors: Omar Gonzalez & Vintagedaddyo & iAndrew & AmazOuz
+ *  Copyright: © 2022
  *
- *	Website: https://ougc.network
+ *  Websites: https://github.com/Sama34 https://github.com/Vintagedaddyo
+ *
  *  Based off: https://community.mybb.com/thread-158934-post-1343419.html#pid1343419
  *
  *	Allow your users to select custom colors to adapt the theme display.
@@ -35,17 +36,25 @@ if(!defined("IN_MYBB"))
 
 if(!defined('IN_ADMINCP'))
 {
+    // Add hooks
+
     $plugins->add_hook('global_intermediate', 'customcolor_headerinclude');
+
     $plugins->add_hook("usercp_options_end", "customcolor_usercp_options_end");
+
     $plugins->add_hook("misc_start", "customcolor_misc_start");
+
     $plugins->add_hook("xmlhttp", "customcolor_xmlhttp");
-    
+
+    // Templatelist
+
     global $templatelist;
     
     if(isset($templatelist))
     {
         $templatelist .= ',';
     }
+
     else
     {
         $templatelist = '';
@@ -59,61 +68,44 @@ if(!defined('IN_ADMINCP'))
     }
 }
 
-// PLUGINLIBRARY
-defined('PLUGINLIBRARY') or define('PLUGINLIBRARY', MYBB_ROOT.'inc/plugins/pluginlibrary.php');
-
 function customcolor_info()
 {
+    // Info
+
     global $lang;
 
     customcolor_lang_load();
 
-    $lang->desc_plugin .= ' This work is isnpired off the work by <strong><a href="https://iandrew.org/">iAndrew</a></strong>, <a href="https://iandrew.org/">AmazOuz</a>, and <a href="https://community.mybb.com/thread-158934-post-1343419.html#pid1343419">vintagedaddyo</a>.';
+    // Desc
+
+    $lang->desc_plugin .= '<br />This work is inspired off the work by: <strong><a href="https://iandrew.org/">iAndrew</a></strong>, <a href="https://iandrew.org/">AmazOuz</a>, and <strong><a href="https://community.mybb.com/thread-158934-post-1343419.html#pid1343419">Vintagedaddyo</a></strong>.';
 
     return array(
         "name"          => $lang->title_plugin,
         "description"   => $lang->desc_plugin,
-		'website'		=> 'https://ougc.network',
-		'author'		=> 'Omar G.',
-		'authorsite'	=> 'https://ougc.network',
+		'website'		=> 'https://github.com/vintagedaddyo/MyBB-jQuery-Color-Picker',
+		'author'		=> 'Omar G. & Vintagedaddyo',
+		'authorsite'	=> 'https://github.com/vintagedaddyo/MyBB-jQuery-Color-Picker',
         "version"       => "1.8",
-		'versioncode'	=> 1800,
-        "codename"      => "ougc_customcolor",
+        "codename"      => "customcolor",
         "compatibility" => "18*"
     );
 }
 
-// Load language file
 function customcolor_lang_load()
 {
+    // Lang load
+
 	global $lang;
 
 	isset($lang->title_plugin) or $lang->load('customcolor');
-}
 
-// PluginLibrary requirement check
-function customcolor_pluginlibrary()
-{
-	global $lang;
-
-	$info = customcolor_info();
-
-	if($file_exists = file_exists(PLUGINLIBRARY))
-	{
-        global $PL;
-    
-        $PL or require_once PLUGINLIBRARY;
-	}
-
-	if(!$file_exists || $PL->version < $info['pl']['version'])
-	{
-		flash_message($lang->sprintf($lang->customcolor_pluginlibrary, $info['pl']['ulr'], $info['pl']['version']), 'error');
-		admin_redirect('index.php?module=config-plugins');
-	}
 }
 
 function customcolor_install()
 {
+    // Install
+
     global $db;
 
     customcolor_is_installed() || $db->add_column('users', 'customcolor', "VARCHAR(6) DEFAULT ''");
@@ -121,43 +113,51 @@ function customcolor_install()
 
 function customcolor_uninstall()
 {
-    global $db, $PL;
+    // Uninstall
 
-	customcolor_pluginlibrary();
+    global $db;
 
     !customcolor_is_installed() || $db->drop_column('users', 'customcolor');
 
 	// Delete stylesheet
-	$PL->stylesheet_delete('customcolor');
+
+    $db->delete_query('themestylesheets', "name='customcolor.css'");
+
+    $query = $db->simple_select('themes', 'tid');
+
+    while($theme = $db->fetch_array($query))
+    {
+        require_once MYBB_ADMIN_DIR.'inc/functions_themes.php';
+
+        update_theme_stylesheet_list($theme['tid']);
+    }
 
 	// Delete settings
-	$PL->settings_delete('customcolor');
 
-	// Delete template/group
-	$PL->templates_delete('customcolor');
+    $db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('customcolor_default','customcolor_backgrounds','customcolor_borders','customcolor_fills','customcolor_texts')");
 
-	global $cache;
+    $db->write_query("DELETE FROM ".TABLE_PREFIX."settinggroups WHERE name = 'customcolor'");
 
-	// Remove version code from cache
-	$plugins = (array)$cache->read('ougc_plugins');
+    // Rebuild settings
 
-	if(isset($plugins['customcolor']))
-	{
-		unset($plugins['customcolor']);
-	}
+    rebuild_settings();
 
-	if($plugins)
-	{
-		$cache->update('ougc_plugins', $plugins);
-	}
-	else
-	{
-		$PL->cache_delete('ougc_plugins');
-	}
+	// Delete template group
+
+    $db->delete_query("templategroups", "prefix = 'customcolor'");
+
+    $update_array = array(
+        'sid' => '-1'
+    );
+
+    $db->update_query("templates", $update_array, "title like '%customcolor_%'");
+
 }
 
 function customcolor_is_installed()
 {
+    // Is installed
+
     global $db;
 
     return $db->field_exists('customcolor', 'users');
@@ -165,19 +165,25 @@ function customcolor_is_installed()
 
 function customcolor_activate()
 {
-    global $lang, $PL;
+    // Activate
 
-    customcolor_pluginlibrary();
+    global $lang, $db;
 
-	$PL->stylesheet('customcolor', '/***************************************************************************
+    customcolor_lang_load();
+
+    // Add stylesheet
+
+$stylesheet = '/***************************************************************************
 *
-*	MyBB jQuery Color Picker plugin (CSS FILE)
-*	Author: Omar Gonzalez
-*	Copyright: © 2020 Omar Gonzalez
+*   MyBB jQuery Color Picker plugin (CSS FILE)
+*   Authors: Omar Gonzalez & Vintagedaddyo & iAndrew & AmazOuz
+*   Copyright: © 2022
 *
-*	Website: https://ougc.network
+*   Websites: https://github.com/Sama34 https://github.com/Vintagedaddyo
 *
-*	Allow your users to select custom colors to adapt the theme display.
+*   Based off: https://community.mybb.com/thread-158934-post-1343419.html#pid1343419
+*
+*   Allow your users to select custom colors to adapt the theme display.
 *
 ***************************************************************************
 
@@ -201,12 +207,11 @@ function customcolor_activate()
     width: 32px;
     border-radius: 50%;
 }
-
 #colorpicker {
-	border: 0;
-	text-indent: -999px;
-	width: 18px;
-	cursor: pointer;
+    border: 0;
+    text-indent: -999px;
+    width: 18px;
+    cursor: pointer;
 }
 .colorpicker * {
        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -372,47 +377,152 @@ function customcolor_activate()
 }
 .colorpicker_slider {
     background-position: bottom;
-}');
+}';
+
+    $new_stylesheet = array(
+        'name'         => 'customcolor.css',
+        'tid'          => 1,
+        'attachedto'   => '',
+        'stylesheet'   => $stylesheet,
+        'lastmodified' => TIME_NOW
+    );
+
+    $sid = $db->insert_query('themestylesheets', $new_stylesheet);
+
+    $db->update_query('themestylesheets', array('cachefile' => "css.php?stylesheet={$sid}"), "sid='{$sid}'", 1);
+
+    $query = $db->simple_select('themes', 'tid');
+
+    while($theme = $db->fetch_array($query))
+    {
+        require_once MYBB_ADMIN_DIR.'inc/functions_themes.php';
+
+        update_theme_stylesheet_list($theme['tid']);
+    }
+
 
 	// Add our settings
-	$PL->settings('customcolor', 'Color Changer', 'Settings for color changer plugin', array(
-		'default'	=> array(
-			'title'		=> 'Default Color',
-			'description'	=> 'Write here the hex of the default theme color. Example: for #003b75 write 003b75',
-			'optionscode'	=> 'text',
-			'value'			=> '008dd4',
-		),
-		'backgrounds'	=> array(
-			'title'		=> 'Backgrounds',
-			'description'	=> 'Write here Classes & Ids (separated by comma) of elements for which you want a changing background color',
-			'optionscode'	=> 'textarea',
-			'value'			=> '.thead, #search input.button',
-		),
-		'borders'	=> array(
-			'title'		=> 'Border Elements',
-			'description'	=> 'Write here Classes & Ids (separated by comma) of elements for which you want a changing border color',
-			'optionscode'	=> 'textarea',
-			'value'			=> '',
-        ),
-		'fills'	=> array(
-			'title'		=> 'Fill Elements',
-			'description'	=> 'Write here Classes & Ids (separated by comma) of elements for which you want a changing fill color',
-			'optionscode'	=> 'textarea',
-			'value'			=> '#logo-svg',
-		),
-		'texts'	=> array(
-			'title'		=> 'Text Elements',
-			'description'	=> 'Write here Classes & Ids (separated by comma) of elements for which you want a changing text color',
-			'optionscode'	=> 'textarea',
-			'value'			=> 'table a:link, .top_links a:link, a:link, a:hover, a:focus, a:visited',
-		)
-    ));
 
-	// Insert template/group
-	$PL->templates('customcolor', 'Custom Color', array(
-		'headerinclude' => '{$ucp}
-<link rel="stylesheet" type="text/css" href="{$mybb->settings[\'bburl\']}/xmlhttp.php?action=customcolor" />',
-        'footer'  => '<script type="text/javascript" src="{$mybb->settings[\'bburl\']}/jscripts/customcolor/colorpicker.js"></script>
+	// Setting group Color Changer
+    
+    $setting_group = array(  
+        'name'          => 'customcolor',
+        'title'         =>  $lang->customcolor_group_title,
+        'description'   =>  $lang->customcolor_group_desc,
+        'disporder'     => '1'
+    );
+
+    $db->insert_query('settinggroups', $setting_group);
+
+    $gid = $db->insert_id();
+    
+    // Setting 1 Default Color
+
+    $setting_1 = array(
+        'name'          => 'customcolor_default',
+        'title'         => $lang->customcolor_default_title,
+        'description'   => $lang->customcolor_default_desc,
+        'optionscode'   => 'text', 
+        'value'         => '008dd4', 
+        'disporder'     => '1', 
+        'gid'           => intval($gid)
+    );
+
+    $db->insert_query('settings', $setting_1);
+    
+    // Setting 2 Background Elements
+
+    $setting_2 = array(
+        'name'          => 'customcolor_backgrounds',
+        'title'         => $lang->customcolor_customElements_title,
+        'description'   => $lang->customcolor_customElements_desc,
+        'optionscode'   => 'textarea', 
+        'value'         => '#search input.button, .thead', 
+        'disporder'     => '2', 
+        'gid'           => intval($gid)
+    );
+
+    $db->insert_query('settings', $setting_2);
+    
+    // Setting 3 Border Elements
+
+    $setting_3 = array(
+        'name'          => 'customcolor_borders',
+        'title'         => $lang->customcolor_customBorders_title,
+        'description'   => $lang->customcolor_customBorders_desc,
+        'optionscode'   => 'textarea', 
+        'value'         => '.postbit_buttons > a:link', 
+        'disporder'     => '3', 
+        'gid'           => intval($gid)
+    );
+
+    $db->insert_query('settings', $setting_3);
+    
+    // Setting 4 Fill Elements
+
+    $setting_4 = array(
+        'name'          => 'customcolor_fills',
+        'title'         => $lang->customcolor_customFills_title,
+        'description'   => $lang->customcolor_customFills_desc,
+        'optionscode'   => 'textarea', 
+        'value'         => '#logo-svg', 
+        'disporder'     => '4', 
+        'gid'           => intval($gid)
+    );
+
+    $db->insert_query('settings', $setting_4);
+
+
+    // Setting 5 Text Elements
+
+    $setting_5 = array(
+        'name'          => 'customcolor_texts',
+        'title'         => $lang->customcolor_customTexts_title,
+        'description'   => $lang->customcolor_customTexts_desc,
+        'optionscode'   => 'textarea', 
+        'value'         => '.top_links a:link, .top_links a:hover, .top_links a:focus, .top_links a:visited, .navigation a:link, .navigation a:hover, .navigation a:focus, .navigation a:visited, .trow1 a:link, .trow1 a:hover, .trow1 a:focus, .trow1 a:visited,  .trow2 a:link, .trow2 a:hover, .trow2 a:focus, .trow2 a:visited, #footer .lower span#copyright  a:link', 
+        'disporder'     => '5', 
+        'gid'           => intval($gid)
+    );
+
+    $db->insert_query('settings', $setting_5);
+
+    // rebuild
+
+    rebuild_settings();    
+
+
+	// Insert template group
+
+	// Template group Custom Color
+    
+    $template_group = array(
+        'prefix' => 'customcolor',
+        'title' => 'Custom Color',
+        'isdefault' => 0
+    );
+
+    $db->insert_query('templategroups', $template_group);
+
+
+    // Template _headerinclude
+
+    $insert_array_1 = array(
+        'title' => 'customcolor_headerinclude',
+        'template' => $db->escape_string('{$ucp}
+<link rel="stylesheet" type="text/css" href="{$mybb->settings[\'bburl\']}/xmlhttp.php?action=customcolor" />'),
+        'sid' => '-2',
+        'version' => '',
+        'dateline' => time()
+        );
+
+    $db->insert_query('templates', $insert_array_1);
+
+    // Template _footer
+
+    $insert_array_2 = array(
+        'title' => 'customcolor_footer',
+        'template' => $db->escape_string('<script type="text/javascript" src="{$mybb->settings[\'bburl\']}/jscripts/customcolor/colorpicker.js"></script>
 <script type="text/javascript" src="{$mybb->settings[\'bburl\']}/jscripts/customcolor/cookie.js"></script>
 <script>
 $(document).ready(function($){
@@ -439,9 +549,19 @@ $(document).ready(function($){
         $(this).ColorPickerSetColor(this.value);
     });
 });
-</script>',
-		//'input'    => '<span class="custom_theme" title="{$lang->colorucp_input}"><input type="text" id="colorpicker" value="{$mybb->settings[\'customcolor_default\']}" /></span>',
-		'usercp'    => '<tr>
+</script>'),
+        'sid' => '-2',
+        'version' => '',
+        'dateline' => time()
+    );
+
+    $db->insert_query('templates', $insert_array_2);
+
+    // Template _usercp
+
+    $insert_array_3 = array(
+        'title' => 'customcolor_usercp',
+        'template' => $db->escape_string('<tr>
     <td colspan="2"><span><strong>{$lang->colorucp}</strong></span></td>
 </tr>
 <tr>
@@ -454,55 +574,99 @@ $(document).ready(function($){
     <td colspan="2">
         <p>{$lang->colorucp_desc}</p>
     </td>
-</tr>',
-        'css_backgrounds' => '{$mybb->settings[\'customcolor_backgrounds\']}
+</tr>'),
+        'sid' => '-2',
+        'version' => '',
+        'dateline' => time()
+    );
+
+    $db->insert_query('templates', $insert_array_3);
+
+    // Template _css_backgrounds
+
+    $insert_array_4 = array(
+        'title' => 'customcolor_css_backgrounds',
+        'template' => $db->escape_string('{$mybb->settings[\'customcolor_backgrounds\']}
 { 
     background: #{$color}; 
-}',
-        'css_borders' => '{$mybb->settings[\'customcolor_borders\']}
+}'),
+        'sid' => '-2',
+        'version' => '',
+        'dateline' => time()
+    );
+
+    $db->insert_query('templates', $insert_array_4);
+
+    // Template _css_borders
+
+    $insert_array_5 = array(
+        'title' => 'customcolor_css_borders',
+        'template' => $db->escape_string('{$mybb->settings[\'customcolor_borders\']}
 { 
     border-color: #{$color}; 
-}',
-        'css_fills' => '{$mybb->settings[\'customcolor_fills\']}
+}'),
+        'sid' => '-2',
+        'version' => '',
+        'dateline' => time()
+    );
+
+    $db->insert_query('templates', $insert_array_5);
+
+    // Template _css_fills
+
+    $insert_array_6 = array(
+        'title' => 'customcolor_css_fills',
+        'template' => $db->escape_string('{$mybb->settings[\'customcolor_fills\']}
 { 
     fill: #{$color}; 
-}',
-        'css_texts' => '{$mybb->settings[\'customcolor_texts\']}
+}'),
+        'sid' => '-2',
+        'version' => '',
+        'dateline' => time()
+    );
+
+    $db->insert_query('templates', $insert_array_6);
+
+    // Template _css_texts
+
+    $insert_array_7 = array(
+        'title' => 'customcolor_css_texts',
+        'template' => $db->escape_string('{$mybb->settings[\'customcolor_texts\']}
 { 
     color: #{$color}; 
-}'
-	));
+}'),
+        'sid' => '-2',
+        'version' => '',
+        'dateline' => time()
+    );
+
+    $db->insert_query('templates', $insert_array_7);
+
 
 	// Modify some templates.
+
 	require_once MYBB_ROOT.'inc/adminfunctions_templates.php';
+
 	find_replace_templatesets('headerinclude', '#'.preg_quote('{$stylesheets}').'#i', '{$stylesheets}{$customcolor_headerinclude}');
+
 	find_replace_templatesets('footer', '#'.preg_quote('{$auto_dst_detection}').'#i', '{$auto_dst_detection}{$customcolor_footer}');
+
 	find_replace_templatesets('usercp_options', '#'.preg_quote('{$board_style}').'#i', '{$board_style}{$customcolor}');
-	//find_replace_templatesets('header_welcomeblock_member', '#'.preg_quote('{$buddylink}').'#i', '{$customcolor_input}{$buddylink}');
 
-	global $cache;
-
-	// Insert version code into cache
-    $plugins = $cache->read('ougc_plugins');
-
-	if(!$plugins)
-	{
-		$plugins = array();
-	}
-
-	$info = customcolor_info();
-
-    $plugins['customcolor'] = $info['versioncode'];
-
-	$cache->update('ougc_plugins', $plugins);
 }
 
 function customcolor_deactivate()
 {
+    // Deactivate
+
 	require_once MYBB_ROOT.'inc/adminfunctions_templates.php';
+
     find_replace_templatesets('headerinclude', '#'.preg_quote('{$customcolor_headerinclude}').'#i', '', 0);
+
     find_replace_templatesets('footer', '#'.preg_quote('{$customcolor_footer}').'#i', '', 0);
+
     find_replace_templatesets('usercp_options', '#'.preg_quote('{$customcolor}').'#i', '', 0);
+
     find_replace_templatesets('header_welcomeblock_member', '#'.preg_quote('{$customcolor_input}').'#i', '', 0);
 }
 
@@ -540,6 +704,7 @@ function customcolor_usercp_options_end()
     customcolor_lang_load();
 
     $lang->colorucp_desc = $lang->sprintf($lang->colorucp_desc, $mybb->settings['bburl']);
+
     $customcolor = eval($templates->render('customcolor_usercp'));
 }
 
@@ -602,6 +767,7 @@ function customcolor_xmlhttp()
     {
         $color = (string)$mybb->user['customcolor'];
     }
+
     else
     {
         $color = (string)$mybb->settings['customcolor_default'];
@@ -617,6 +783,7 @@ function customcolor_xmlhttp()
     $templates->cache('customcolor_css_backgrounds, customcolor_css_borders, customcolor_css_fills, customcolor_css_texts');
 
     $bgs = explode(',', '#colorpicker,'.$mybb->settings['customcolor_backgrounds']);
+
     $mybb->settings['customcolor_backgrounds'] = implode(',', $bgs);
 
     $css = eval($templates->render('customcolor_css_backgrounds', true, false));
@@ -637,5 +804,7 @@ function customcolor_xmlhttp()
     }
 
     echo $css;
+
     exit;
 }
+

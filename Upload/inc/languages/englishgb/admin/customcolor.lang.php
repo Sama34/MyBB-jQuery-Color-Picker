@@ -2,7 +2,7 @@
 
 /***************************************************************************
  *
- *	MyBB jQuery Color Picker plugin (/inc/languages/english/admin/customcolor.lang.php)
+ *	MyBB jQuery Color Picker plugin (/inc/languages/englishgb/admin/customcolor.lang.php)
  *  Authors: Omar Gonzalez & Vintagedaddyo & iAndrew & AmazOuz
  *  Copyright: © 2022
  *

@@ -1,3 +1,17 @@
+/***************************************************************************
+ *
+ *	MyBB jQuery Color Picker plugin (/Documentation/LICENSE.txt)
+ *	Authors: Omar Gonzalez & Vintagedaddyo & iAndrew & AmazOuz
+ *	Copyright: © 2022
+ *
+ *	Websites: https://github.com/Sama34 https://github.com/Vintagedaddyo
+ *
+ *       Based off: https://community.mybb.com/thread-158934-post-1343419.html#pid1343419
+ *
+ *	Allow your users to select custom colors to adapt the theme display.
+ *
+ ***************************************************************************
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
