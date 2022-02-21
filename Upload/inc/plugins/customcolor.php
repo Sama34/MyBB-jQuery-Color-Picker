@@ -434,9 +434,15 @@ $(document).ready(function($){
     });
 });
 </script>',
-		'input'    => '<span class="custom_theme" title="{$lang->colorucp_input}"><input type="text" id="colorpicker" value="{$mybb->settings[\'customcolor_default\']}" /></span>',
+		//'input'    => '<span class="custom_theme" title="{$lang->colorucp_input}"><input type="text" id="colorpicker" value="{$mybb->settings[\'customcolor_default\']}" /></span>',
 		'usercp'    => '<tr>
-    <td colspan="2"><span class="smalltext">{$lang->colorucp}</span></td>
+    <td colspan="2"><span><strong>{$lang->colorucp}</strong></span></td>
+</tr>
+<tr>
+    <td colspan="2">
+    <p class="smalltext">{$lang->colorucp_input}</p>
+<span class="custom_theme" title="{$lang->colorucp_input}"><input type="text" id="colorpicker" value="{$mybb->settings[\'customcolor_default\']}" /></span>
+</td>
 </tr>
 <tr>
     <td colspan="2">
@@ -466,7 +472,7 @@ $(document).ready(function($){
 	find_replace_templatesets('headerinclude', '#'.preg_quote('{$stylesheets}').'#i', '{$stylesheets}{$customcolor_headerinclude}');
 	find_replace_templatesets('footer', '#'.preg_quote('{$auto_dst_detection}').'#i', '{$auto_dst_detection}{$customcolor_footer}');
 	find_replace_templatesets('usercp_options', '#'.preg_quote('{$board_style}').'#i', '{$board_style}{$customcolor}');
-	find_replace_templatesets('header_welcomeblock_member', '#'.preg_quote('{$buddylink}').'#i', '{$customcolor_input}{$buddylink}');
+	//find_replace_templatesets('header_welcomeblock_member', '#'.preg_quote('{$buddylink}').'#i', '{$customcolor_input}{$buddylink}');
 
 	global $cache;
 
