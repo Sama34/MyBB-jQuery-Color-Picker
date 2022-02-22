@@ -31,21 +31,21 @@
 
 // Settings
 
-$l["colorucp"] = "Color Settings";
+$l["colorucp"] = "Parametres de couleur";
 
 // Input
 
-$l["colorucp_input"] = "Choose your favourite color from the color picker below, then click the save button.";
+$l["colorucp_input"] = "Choisissez votre couleur preferee dans le selecteur de couleurs ci-dessous, puis cliquez sur le bouton Enregistrer.";
 
 // Revert
 
-$l["colorucp_desc"] = "<a href=\"{1}/misc.php?action=customcolor&reset=1\">Click here</a> to revert back to the default color.";
+$l["colorucp_desc"] = "<a href=\"{1}/misc.php?action=customcolor&reset=1\">Cliquez ici</a> pour revenir a la couleur par defaut.";
 
 // Choose
 
-$l["colorchoose"] = "Choose color";
+$l["colorchoose"] = "Choisissez la couleur";
 
 // Saved
 
-$l["colorsaved"] = "Custom color saved successfuly.";
+$l["colorsaved"] = "Couleur personnalisee enregistree avec succes.";
 

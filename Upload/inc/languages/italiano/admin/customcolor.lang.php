@@ -31,43 +31,43 @@
 
 // Plugin Info
 
-$l["title_plugin"] = "Custom Color Changer";
+$l["title_plugin"] = "Cambia colore personalizzato";
 
-$l["desc_plugin"] = "Allow your users to select custom colors to adapt the theme display.";
+$l["desc_plugin"] = "Consenti ai tuoi utenti di selezionare colori personalizzati per adattare la visualizzazione del tema.";
 
 // Setting Group
 
-$l["customcolor_group_title"] = "Color Changer";
+$l["customcolor_group_title"] = "Cambia colore";
 
-$l["customcolor_group_desc"] = "Settings of the custom color plugin.";
+$l["customcolor_group_desc"] = "Impostazioni del plug-in colore personalizzato.";
 
 // Setting Default Hex
 
-$l["customcolor_default_title"] = "Default Hex Color";
+$l["customcolor_default_title"] = "Colore esadecimale predefinito";
 
-$l["customcolor_default_desc"] = "Write here the hex of the default color you want for your forums. <strong>Example : </strong>for #008dd4 write 008dd4";
+$l["customcolor_default_desc"] = "Scrivi qui l esagono del colore predefinito che desideri per i tuoi forum. <strong>Esempio: </strong>per #008dd4 scrivere 008dd4";
 
 // Setting Background
 
-$l["customcolor_customElements_title"] = "Custom Background Color Elements";
+$l["customcolor_customElements_title"] = "Elementi di colore di sfondo personalizzati";
 
-$l["customcolor_customElements_desc"] = "Write here Classes & Ids (separated by comma) of elements for which you want to change the background color";
+$l["customcolor_customElements_desc"] = "Scrivi qui Classi e ID (separati da virgola) degli elementi per i quali vuoi cambiare il colore di sfondo";
 
 // Setting Border
 
-$l["customcolor_customBorders_title"] = "Custom Border Color Elements";
+$l["customcolor_customBorders_title"] = "Elementi di colore del bordo personalizzati";
 
-$l["customcolor_customBorders_desc"] = "Write here Classes & Ids (separated by comma) of elements for which you want to change the border color";
+$l["customcolor_customBorders_desc"] = "Scrivi qui Classi e ID (separati da virgola) degli elementi per i quali vuoi cambiare il colore del bordo";
 
 // Setting Fill
 
-$l["customcolor_customFills_title"] = "Custom Fills";
+$l["customcolor_customFills_title"] = "Elementi di colore di riempimento personalizzati";
 
-$l["customcolor_customFills_desc"] = "Write here Classes & Ids (separated by comma) of elements for which you want to change the fill color";
+$l["customcolor_customFills_desc"] = "Scrivi qui Classi e ID (separati da virgola) degli elementi per i quali vuoi cambiare il colore di riempimento";
 
 // Setting Text
 
-$l["customcolor_customTexts_title"] = "Custom Text Color Elements";
+$l["customcolor_customTexts_title"] = "Elementi di colore del testo personalizzati";
 
-$l["customcolor_customTexts_desc"] = "Write here Classes & Ids (separated by comma) of elements for which you want to change the text color";
+$l["customcolor_customTexts_desc"] = "Scrivi qui Classi e ID (separati da virgola) degli elementi per i quali vuoi cambiare il colore del testo";
 

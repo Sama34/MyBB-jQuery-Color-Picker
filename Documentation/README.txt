@@ -38,9 +38,9 @@ Current localization support:
 
 - english * yes
 - englishgb * yes
-- espanol * en placeholder
-- french * en placeholder
-- italiano * en placeholder
+- espanol * yes
+- french * yes
+- italiano * yes
 
 
 To Install:
@@ -109,4 +109,4 @@ Changes:
 
 - removed the dependency on plugin library by writing those specific parts to be standalone for the plugin to be used without such a need (as that sort of thing bugs me when folks say hey, here is this plug you should use, but, wait, you first need another plug/library in order to use the plug, grrr, while plenty prefer standalone, or leave it alone, lol)
 
-- began implementing localization support (localization is in place and enlglish and englishgb are set, currently, espanol, French and Italiano files are present but English placeholders until I can find free time to get to them...
+- began implementing localization support (localization is currently in place for English, EnglishGB, Espanol, French, Italiano)

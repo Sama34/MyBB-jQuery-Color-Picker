@@ -47,5 +47,5 @@ $l["colorchoose"] = "Choose color";
 
 // Saved
 
-$l["colorsaved"] = "Custom color saved successfuly.";
+$l["colorsaved"] = "Custom color saved successfully.";
 

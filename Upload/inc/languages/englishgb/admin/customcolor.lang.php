@@ -45,7 +45,7 @@ $l["customcolor_group_desc"] = "Settings of the custom color plugin.";
 
 $l["customcolor_default_title"] = "Default Hex Color";
 
-$l["customcolor_default_desc"] = "Write here the hex of the default color you want for your forums. <strong>Example : </strong>for #008dd4 write 008dd4";
+$l["customcolor_default_desc"] = "Write here the hex of the default color you want for your forums. <strong>Example: </strong>for #008dd4 write 008dd4";
 
 // Setting Background
 
@@ -61,7 +61,7 @@ $l["customcolor_customBorders_desc"] = "Write here Classes & Ids (separated by c
 
 // Setting Fill
 
-$l["customcolor_customFills_title"] = "Custom Fills";
+$l["customcolor_customFills_title"] = "Custom Fill Color Elements";
 
 $l["customcolor_customFills_desc"] = "Write here Classes & Ids (separated by comma) of elements for which you want to change the fill color";
 
