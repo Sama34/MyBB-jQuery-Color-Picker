@@ -86,7 +86,7 @@ function customcolor_info()
 		'website'		=> 'https://github.com/vintagedaddyo/MyBB-jQuery-Color-Picker',
 		'author'		=> 'Omar G. & Vintagedaddyo',
 		'authorsite'	=> 'https://github.com/vintagedaddyo/MyBB-jQuery-Color-Picker',
-        "version"       => "1.8",
+        "version"       => "1.2",
         "codename"      => "customcolor",
         "compatibility" => "18*"
     );

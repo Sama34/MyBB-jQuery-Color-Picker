@@ -28,7 +28,7 @@
 ****************************************************************************/
 
 
-Custom Color Changer * (1.8): 
+Custom Color Changer * (1.2): 
 
 * Install a color changer in your forums & let every member choose their color
 
@@ -102,6 +102,8 @@ Etc, etc, .....
 
 
 Changes:
+
+- changed version numbering as it made more sense rather than be reflective of software version and saying hey the plugin is on 1.8 so plug version is 1.8? Instead factoring that initial version should be factored as version 1, then, my initial conversions begin thus @ 1.1 and finalized as 1.2 as it made more sense to me and should be such as to not confuse from previous project as this with various changes and dependency removals changes is now diff project...
 
 - added the old touch specific files I shared back in 2016 tutorial this was based on
 
